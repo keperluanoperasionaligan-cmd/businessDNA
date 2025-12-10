@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business DNA-16™ Assessment</title>
+    <style>
+        :root {
+            --primary: #111827;
+            --accent: #2563eb;
+            --light: #f3f4f6;
+            --border: #e5e7eb;
+            --success: #059669;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--primary);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        /* HEADER */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        h1 { margin-bottom: 5px; font-weight: 800; letter-spacing: -1px; }
+        .subtitle { color: #666; font-size: 1em; }
+
+        /* FORM QUESTIONS */
+        .section-title {
+            background: var(--light);
+            padding: 12px 15px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--accent);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .question-card {
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .question-text {
+            font-weight: 600;
+            font-size: 1.05em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .scale-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 100%;
+            margin-top: 10px;
+        }
+
+        .scale-option {
+            text-align: center;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .scale-option input {
+            transform: scale(1.5);
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 50px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--accent);
+        }
+
+        /* RESULT SECTION */
+        #result-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .tribe-badge {
+            text-align: center;
+            background: var(--primary);
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .result-header {
+            text-align: center;
+            padding: 30px;
+            background: var(--light);
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .archetype-code {
+            font-size: 3.5em;
+            font-weight: 900;
+            color: var(--accent);
+            line-height: 1;
+            margin: 10px 0;
+        }
+
+        .archetype-name {
+            font-size: 1.8em;
+            font-weight: 800;
+        }
+
+        /* CONTENT BOXES */
+        .content-box {
+            margin-bottom: 25px;
+        }
+
+        .content-box h3 {
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            text-transform: uppercase;
+            color: #444;
+        }
+
+        .content-text {
+            font-size: 0.95em;
+            color: #333;
+            white-space: pre-line; /* Agar enter terbaca */
+        }
+
+        .biz-list {
+            background: #f0fdf4; /* Light green tint */
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #d1fae5;
+        }
+
+        .social-box {
+            background: #eff6ff; /* Light blue tint */
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dbeafe;
+        }
+
+        .figure-box {
+            background: #fff;
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 8px;
+            font-style: italic;
+            color: #555;
+        }
+
+        /* BAR CHART */
+        .bars-wrapper {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px dashed var(--border);
+        }
+        
+        .bar-container { margin-bottom: 12px; }
+        .bar-label { display: flex; justify-content: space-between; font-size: 0.8em; font-weight: bold; margin-bottom: 3px; }
+        .progress-bg { background: #e5e7eb; height: 10px; border-radius: 5px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); transition: width 1s; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Business DNA-16™</h1>
+        <div class="subtitle">Temukan Cetak Biru Bisnis & Kepribadian Entrepreneur Anda</div>
+    </header>
+
+    <form id="dnaForm">
+        <div id="questions-container"></div>
+        <button type="submit" class="btn-submit">ANALISIS HASIL SAYA</button>
+    </form>
+
+    <div id="result-container">
+        <div style="text-align: center;">
+            <div id="result-tribe" class="tribe-badge">TRIBE NAME</div>
+        </div>
+        
+        <div class="result-header">
+            <div class="archetype-code" id="result-code">----</div>
+            <div class="archetype-name" id="result-name">Loading...</div>
+        </div>
+
+        <div class="content-box">
+            <h3>Definisi & Pola Pikir</h3>
+            <div class="content-text" id="result-def">...</div>
+        </div>
+
+        <div class="content-box">
+            <h3>Kategori Bisnis yang Cocok</h3>
+            <div class="content-text biz-list" id="result-biz">...</div>
+        </div>
+
+        <div class="content-box">
+            <h3>Gaya Sosial: <span id="social-variant-name" style="color:var(--accent)">-</span></h3>
+            <div class="content-text social-box" id="result-social">...</div>
+        </div>
+
+        <div class="content-box">
+            <h3>Tokoh Arketipe (Role Model)</h3>
+            <div class="content-text figure-box" id="result-figures">...</div>
+        </div>
+
+        <div class="bars-wrapper">
+            <h3>Komposisi DNA Anda</h3>
+            <div id="bars-display"></div>
+        </div>
+        
+        <button onclick="location.reload()" class="btn-submit" style="background:#444; margin-top:30px;">Test Ulang</button>
+    </div>
+
+<script>
+    // --- DATABASE 16 ARCHETYPES (FULL DATA) ---
+    const archetypes = {
+        "CHSP": {
+            tribe: "TRIBE 1 — THE BUILDERS",
+            name: "The Grounded Builder",
+            def: "CHSP membangun bisnis lewat kedisiplinan harian dan pengendalian risiko. Mereka hanya percaya pada hal yang bisa dilihat, disentuh, dan dihitung.\n\nStabilitas adalah nilai utama: pelan tapi tidak pernah goyah. Cocok untuk model bisnis yang berulang dan berumur panjang. CHSP biasanya mulai dari hal yang konkret dan bisa diuji langsung. Mereka kuat di konsistensi, nyaman dalam rutinitas, dan lebih suka bisnis yang dapat bertahan bertahun-tahun daripada pertumbuhan cepat yang penuh ketidakpastian.",
+            biz: "• F&B sederhana, toko kecil, jasa harian.\n• Operasional harian dengan ritme yang jelas dan permintaan stabil.\n• Kebutuhan dasar masyarakat yang tidak bergantung pada tren.\n• Retail fungsional yang fokus pada barang kebutuhan.\n• Layanan teknis atau jasa rutin berbasis keahlian praktis.",
+            social_p: "Grounded Builder yang nyaman menjadi wajah bisnis. Mereka membangun kepercayaan lewat interaksi langsung dan hubungan personal yang hangat.",
+            social_g: "Grounded Builder yang bekerja dari balik layar. Fokus pada proses, kualitas produksi, dan efisiensi tanpa perlu tampil.",
+            figures: "In-N-Out Burger original family, Glen Bell (Taco Bell early), James Dyson (early prototyping), Carroll Shelby."
+        },
+        "CHSA": {
+            tribe: "TRIBE 1 — THE BUILDERS",
+            name: "The Methodical Climber",
+            def: "CHSA adalah pekerja sistematis yang naik kelas lewat pola kerja konsisten. Ambisi mereka kuat, tapi mereka bergerak rapi, terukur, dan tidak impulsif. Mereka cocok membangun bisnis yang memerlukan disiplin tinggi dan proses berulang yang dapat distandardisasi.\n\nCHSA senang bekerja dengan ritme yang bisa diprediksi, memperbaiki detail demi detail, dan memastikan setiap komponen bisnis mengikuti standar jelas.",
+            biz: "• Franchise low-risk, jasa rutin, kursus lokal.\n• Model bisnis dengan sistem operasi yang harus stabil dan repetitif.\n• Layanan atau produk yang membutuhkan kualitas konsisten setiap hari.\n• Usaha yang meningkat lewat disiplin, bukan spekulasi.",
+            social_p: "Tipe yang memimpin lewat keteladanan. Suka menjadi wajah bisnis yang tertata, disiplin, dan profesional. Mereka mudah dipercaya karena tampil menunjukkan standar yang mereka jaga.",
+            social_g: "Lebih suka memimpin dari backend. Mereka fokus pada sistem, SOP, dan pelaksanaan yang rapi tanpa perlu tampil ke depan publik.",
+            figures: "Howard Schultz (Early Starbucks), Ray Kroc (McDonald's systems), Bob Iger, Sam Walton."
+        },
+        "OHSP": {
+            tribe: "TRIBE 1 — THE BUILDERS",
+            name: "The Fearless Maker",
+            def: "OHSP adalah eksekutor cepat yang mengejar peluang spontan. Mereka sangat mengandalkan validasi lapangan dan nyaman mengambil keputusan cepat. Kuat di momentum dan cocok di dunia bisnis yang berubah cepat.\n\nOHSP cenderung berpikir coba dulu, lihat hasilnya, bukan menunggu semuanya sempurna sebelum jalan. Tipe ini hidup dari gerakan, keberanian, dan insting praktis.",
+            biz: "• Street food modern, pop-up, jual–beli harian, usaha ROI cepat.\n• Bisnis berbasis momentum jangka pendek dengan perputaran cepat.\n• Aktivitas yang membutuhkan adaptasi harian dan improvisasi.\n• Usaha dengan modal kecil yang bisa diputar cepat untuk profit.",
+            social_p: "Live-selling warrior. Suka tampil, suka interaksi, dan menggunakan kehadirannya sebagai mesin penjualan. Memanfaatkan energi publik untuk momentum.",
+            social_g: "Eksekutor cepat yang tetap invisible. Jago jualan lewat chat, DM, atau sistem automatis. Bekerja efisien tanpa perlu jadi pusat perhatian.",
+            figures: "Daymond John (FUBU early), Gary Vaynerchuk (Wine Library era), Richard Montañez (Cheetos), Joe Gebbia (Airbnb early)."
+        },
+        "OHSA": {
+            tribe: "TRIBE 1 — THE BUILDERS",
+            name: "The Craftsman Warrior",
+            def: "OHSA energik, kompetitif, dan tahan banting. Mereka menjaga kualitas lewat kerja manual dan punya dorongan kuat untuk unggul. Stabil tapi tetap cepat merespons peluang.\n\nMereka suka menggabungkan craft, konsistensi, dan ambisi untuk naik kelas. Energi mereka besar, daya tahannya kuat, dan mereka berkembang di lingkungan yang butuh kreativitas sekaligus disiplin.",
+            biz: "• Cafe lokal, brand komunitas, workshop craft, usaha padat karya.\n• Usaha berbasis craft, seni, atau kualitas manual yang harus dijaga ketat.\n• Bisnis yang bertumpu pada identitas, ciri khas, dan rasa originalitas.\n• Brand yang tumbuh dari komunitas kecil dan berkembang lewat reputasi.",
+            social_p: "Tipe yang bangga dengan karyanya dan tidak ragu tampil. Sering menjadi figur pemimpin gerakan kreatif lokal atau komunitas craft.",
+            social_g: "Craftsman yang nyaman menghasilkan karya kualitas tinggi tanpa spotlight. Perfeksionis diam, fokus pada detail, membangun reputasi lewat hasil.",
+            figures: "Yvon Chouinard (Patagonia), Nigo (BAPE), Jiro Ono (Sushi Master), Rick Rubin, Anthony Bourdain."
+        },
+        "OHXP": {
+            tribe: "TRIBE 2 — THE SCALERS",
+            name: "The Trailblazer",
+            def: "OHXP adalah pemburu pola yang bergerak cepat. Mereka mencoba banyak ide sampai menemukan satu yang bisa meledak besar. Kecepatan eksperimen adalah senjata utama mereka.\n\nOHXP nyaman hidup dalam ketidakpastian, lompat dari satu percobaan ke percobaan berikutnya, dan membaca sinyal pasar secara intuitif. Thrive di dunia yang berubah cepat.",
+            biz: "• Produk digital, D2C niche, e-commerce fast-moving.\n• Model bisnis yang dapat diubah atau diuji dengan cepat.\n• Produk yang responsif terhadap tren dan momentum.\n• Usaha digital yang bisa scale lewat traffic, ads, atau platform online.",
+            social_p: "Trailblazer yang vokal. Suka bicara soal eksperimen, nunjukkin proses, dan sering jadi wajah 'ide baru'.",
+            social_g: "Eksperimentator diam. Jarang tampil, tapi eksperimennya tajam. Sering tiba-tiba muncul dengan produk terbukti tanpa publikasi proses.",
+            figures: "Casey Neistat, Marc Randolph (Netflix), Sophia Amoruso (Nasty Gal), Evan Williams (Twitter), MrBeast."
+        },
+        "OHXA": {
+            tribe: "TRIBE 2 — THE SCALERS",
+            name: "The Disruptor",
+            def: "OHXA adalah kreator ambisius yang ingin mengubah pasar lewat sesuatu yang berbeda. Mereka mencampurkan craft, estetika, dan growth menjadi satu energi besar.\n\nOHXA bukan hanya mau besar; mereka ingin dikenali sebagai pembawa perubahan. Tipe ini sering berada di garis depan tren baru—baik itu fashion, lifestyle, atau media.",
+            biz: "• Fashion kreatif, lifestyle brand, media baru.\n• Produk yang sangat mengandalkan estetika dan diferensiasi.\n• Brand yang bertumpu pada identitas kuat dan narasi kreatif.\n• Industri yang dinamis, cepat berubah, dan sensitif terhadap tren budaya.",
+            social_p: "Tipe yang suka memimpin tren. Tampil percaya diri dengan estetika dan narasi kuat. Kehadiran publik adalah bagian dari brand.",
+            social_g: "Disruptor di balik layar. Fokus menciptakan kualitas unik dan membiarkan produknya berbicara. Low-profile tapi idenya menciptakan gelombang.",
+            figures: "Nigo (Human Made), Virgil Abloh, Tyler The Creator, Steve Jobs (Early Apple), Ben Francis (Gymshark)."
+        },
+        "ODXP": {
+            tribe: "TRIBE 2 — THE SCALERS",
+            name: "The Growth Gambler",
+            def: "ODXP adalah pemain leverage. Jarang kerja manual, tapi cepat mengatur tim, modal, dan iklan untuk memperbesar output. Toleransi risiko tinggi selama ROI masuk akal.\n\nODXP berpikir dalam skala: bagaimana mempercepat, memperbesar, dan memaksimalkan. Nyaman dengan data, dashboard, dan manuver cepat.",
+            biz: "• Arbitrage, e-commerce high-margin, paid-ads product.\n• Bisnis dengan leverage tinggi: modal, ads, traffic, atau tim.\n• Model profit yang bergantung pada optimisasi dan scale, bukan craft.\n• Aktivitas yang membutuhkan keputusan cepat berdasarkan data.",
+            social_p: "Growth leader yang tampil sebagai ahli strategi. Suka memimpin tim dari depan, membangun hype, dan menunjukkan visi ekspansi.",
+            social_g: "Operator agresif tapi low-profile. Fokus pada angka, sistem, dan manajemen. Tidak perlu tampil—yang penting grafik naik.",
+            figures: "Sam Parr, Alex Hormozi, Travis Kalanick (Uber), Andrew Wilkinson, Noah Kagan."
+        },
+        "ODSP": {
+            tribe: "TRIBE 2 — THE SCALERS",
+            name: "The Calm Opportunist",
+            def: "ODSP memilih peluang dengan tenang. Tetap opportunist, tetapi eksekusinya rapi, terstruktur, dan anti-drama. Lebih stabil dan fokus pada kesinambungan jangka panjang dibanding ODXP.\n\nMereka membaca momentum pasar, lalu mengatur orang dan sistem untuk mengeksekusinya tanpa chaos.",
+            biz: "• Modern reseller, digital agency kecil, jasa niche, franchise ringan.\n• Model bisnis yang memerlukan keseimbangan antara adaptasi dan stabilitas.\n• Bisnis yang bisa didelegasikan sebagian tapi tetap butuh kendali owner.\n• Aktivitas dengan aliran pendapatan reguler.",
+            social_p: "Pemimpin tenang yang tampil seperlunya untuk menjaga trust klien dan tim. Komunikasi rapi dan diplomatis.",
+            social_g: "Pemilik bisnis tenang yang menggerakkan hasil lewat sistem. Minim tampil, tapi operasional lancar. Konsistensi lebih penting daripada eksposur.",
+            figures: "Reid Hoffman (LinkedIn), Tim Ferriss, Stewart Butterfield (Slack), Daniel Ek (Spotify), Jason Fried."
+        },
+        "CDXA": {
+            tribe: "TRIBE 3 — THE ARCHITECTS",
+            name: "The Vision Architect",
+            def: "CDXA membangun bisnis seperti merancang kota: modular, efisien, dan bisa di-scale tanpa kehilangan struktur. Hati-hati dalam keputusan, tetapi punya ambisi mencapai level tinggi.\n\nCDXA jago menyusun sistem, proses, dan blueprint jangka panjang. Mereka bukan eksekutor cepat, tapi memastikan setiap langkah aman sebelum memperluas operasi.",
+            biz: "• Franchise multi-unit, B2B structured, retail terstandarisasi.\n• Bisnis dengan potensi ekspansi bertahap dan lokasi jamak.\n• Operasi yang mengandalkan manual, SOP, dan struktur yang bisa direplikasi.\n• B2B dengan proses panjang dan koordinasi tim besar.",
+            social_p: "Pemimpin profesional, membawa kredibilitas dan visi jangka panjang ke depan publik. Mengomunikasikan strategi besar.",
+            social_g: "Builder arsitektural di balik layar. Fokus pada dokumen struktural, proses operasional, dan pemetaan jangka panjang.",
+            figures: "Howard Schultz (Starbucks scaling), Fred DeLuca (Subway), Indra Nooyi (PepsiCo), Sheryl Sandberg."
+        },
+        "ODXA": {
+            tribe: "TRIBE 3 — THE ARCHITECTS",
+            name: "The Mogul Commander",
+            def: "ODXA adalah tipe CEO alami: cepat, tegas, ambisius, dan nyaman menggerakkan tim besar menuju scale. Melihat peluang makro dan membangun struktur untuk mengeksekusinya.\n\nODXA thrive di pasar kompetitif yang membutuhkan keputusan cepat dan eksekusi agresif. Ambisi besar adalah mesin utama mereka.",
+            biz: "• Model multi-outlet, industri high-competition, scale agresif.\n• Operasi berbasis tim besar yang memerlukan delegasi cepat.\n• Brand consumer-facing yang membutuhkan kecepatan ekspansi.\n• Bisnis yang mengandalkan clarity of vision.",
+            social_p: "Pemimpin yang tampil sebagai motor momentum. Memanfaatkan karisma untuk mempercepat ekspansi dan menggerakkan tim.",
+            social_g: "Commander yang memimpin melalui sistem dan keputusan strategis di balik layar. Mengendalikan arah besar tanpa harus tampil.",
+            figures: "Travis Kalanick, Reed Hastings, Elon Musk (Ops phase), Kevin Systrom, Jack Welch."
+        },
+        "CDSA": {
+            tribe: "TRIBE 3 — THE ARCHITECTS",
+            name: "The Executive Builder",
+            def: "CDSA adalah operator profesional yang menjaga stabilitas sambil tetap naik kelas. Berpikir sistem, SOP, dan keandalan jangka panjang.\n\nTipe 'COO alami' yang membuat bisnis terasa aman, rapi, dan predictable. Ambisi mereka dieksekusi melalui struktur, bukan spekulasi.",
+            biz: "• Layanan profesional dengan SOP kuat, B2B services.\n• Operasi dengan kompleksitas tinggi dan tim besar.\n• Model rutin yang bisa naik kelas lewat efisiensi.\n• Industri yang membutuhkan dokumentasi dan quality control.",
+            social_p: "Pemimpin profesional yang tampil untuk membangun kredibilitas. Komunikasi rapi dan meyakinkan.",
+            social_g: "Operator hening yang menjaga mesin bisnis tetap bekerja sempurna. Fokus pada eksekusi, struktur, dan reliability.",
+            figures: "Tim Cook, Satya Nadella, Ginni Rometty, Susan Wojcicki, Mary Barra."
+        },
+        "ODSA": {
+            tribe: "TRIBE 3 — THE ARCHITECTS",
+            name: "The Prestige Architect",
+            def: "ODSA menggabungkan peluang premium dengan struktur rapi. Membangun brand, layanan, atau produk yang refined, bernilai tinggi, dan punya standar estetika kuat.\n\nAmbisi mereka bersifat elegan: bukan hanya besar, tapi berkelas.",
+            biz: "• Brand positioning premium, layanan high-end.\n• Produk berstandar mutu tinggi dengan kurasi ketat.\n• Bisnis steady yang tumbuh lewat reputasi, bukan volume.\n• Industri yang mengutamakan detail dan refinement.",
+            social_p: "Figur elegan yang membawa prestise lewat kehadiran publik. Persona mereka menaikkan nilai brand.",
+            social_g: "Arsitek premium di balik layar. Fokus pada kualitas, detail, dan experience tanpa memerlukan spotlight.",
+            figures: "Tom Ford, Jony Ive, Anna Wintour, Reed Krakoff, Dieter Rams."
+        },
+        "CDSP": {
+            tribe: "TRIBE 4 — THE CAPITALISTS",
+            name: "The Strategic Operator",
+            def: "CDSP adalah penjaga aset dan cashflow yang disiplin. Mengutamakan stabilitas, efisiensi, dan kontrol risiko.\n\nBukan tipe yang mengejar pertumbuhan liar—yang penting bisnis berjalan konsisten, margin aman, dan sistem bisa bekerja tanpa drama.",
+            biz: "• Franchise sederhana, properti kecil, penyewaan.\n• Layanan rutin berlangganan, bisnis berulang dengan SOP stabil.\n• Operasi yang membutuhkan efisiensi dan kontrol ketat.\n• Model bisnis dengan risiko rendah dan arus kas terprediksi.",
+            social_p: "Pemimpin steady yang tampil seperlunya untuk menjaga kepercayaan klien/tim. Lembut, profesional, membangun trust.",
+            social_g: "Operator yang bekerja tenang dari backend. Mengelola cashflow dan efisiensi tanpa perlu eksposur. Stability over spotlight.",
+            figures: "Warren Buffett, Charlie Munger, Jim Sinegal (Costco), Ingvar Kamprad (IKEA), Rob Walton."
+        },
+        "CHXP": {
+            tribe: "TRIBE 4 — THE CAPITALISTS",
+            name: "The Craft Scaler",
+            def: "CHXP memulai dari craft dan skill pribadi, lalu scale ketika kualitas sudah terbukti. Tidak agresif, tetapi ekspansinya bersih dan sistematis.\n\nMereka menggabungkan kontrol detail dengan kemampuan memikirkan scale. Kualitas tetap terjaga meski volume naik.",
+            biz: "• Specialty F&B chain, produk craft premium terstandarisasi.\n• Vertical brand dengan kualitas tinggi.\n• Produksi kecil yang dinaikkan ke sistem batch besar.\n• Bisnis yang mengutamakan kontrol kualitas sebelum ekspansi.",
+            social_p: "Craft founder yang suka tampil memperlihatkan kualitas. Membangun loyalitas terhadap produk.",
+            social_g: "Craft scaler senyap. Fokus pada produksi dan sistem skala kecil yang makin besar. Kekuatan ada di konsistensi.",
+            figures: "James Dyson, Howard Schultz (Early), Dave Thomas (Wendy's), Pierre Hermé, Masaharu Morimoto."
+        },
+        "CDXP": {
+            tribe: "TRIBE 4 — THE CAPITALISTS",
+            name: "The Silent Scaler",
+            def: "CDXP membesarkan bisnis diam-diam lewat efisiensi, bukan kehebohan. Kuat di supply chain, backend, proses, dan distribusi.\n\nKotornya bisnis nggak masalah—yang penting margin sehat dan ekspansi berjalan. Tipe 'operator senyap' yang fokus pada hasil konkret.",
+            biz: "• Distribusi, wholesaling, warehouse & fulfillment.\n• E-commerce stabil yang tidak bergantung tren.\n• Model supply chain terstruktur, pabrik sistem efisien.\n• Bisnis volume dengan manajemen stok ketat.",
+            social_p: "Pemimpin publik yang tampil seperlunya untuk negosiasi. Tidak flamboyan, tapi profesional.",
+            social_g: "Scaler senyap yang hidup di backend. Fokus total pada optimasi dan efisiensi. Hampir tidak terlihat, tapi hasilnya nyata.",
+            figures: "Jeff Bezos (Early), Doug McMillon (Walmart), Jensen Huang (Early Nvidia), Richard Montañez."
+        },
+        "CHXA": {
+            tribe: "TRIBE 4 — THE CAPITALISTS",
+            name: "The Purpose Maker",
+            def: "CHXA membangun brand dari nilai personal, craft kuat, dan ambisi naik kelas. Ingin bisnis tumbuh, tapi tetap membawa identitas dan misi jelas.\n\nTipe yang menciptakan brand dengan rasa, makna, dan karakter personal yang kuat—kemudian memastikan brand itu bisa scale tanpa kehilangan nilai.",
+            biz: "• Boutique brand karakter unik, purpose-driven goods.\n• Produk premium dengan storytelling kuat.\n• Bisnis yang menggabungkan craft + misi + scale.\n• Consumer brand berorientasi estetika dan nilai.",
+            social_p: "Figur dengan nilai kuat yang membangun brand lewat persona. Membawa misi dan karakter brand ke publik.",
+            social_g: "Purpose maker di balik layar. Merawat nilai dan positioning secara senyap. Brand yang bicara—bukan foundernya.",
+            figures: "Yvon Chouinard, Ben Francis, James Hoffman, Emily Weiss (Glossier), Rick Rubin."
+        }
+    };
+
+    // --- PERTANYAAN (30 SOAL) ---
+    const questions = [
+        // MONEY MINDSET
+        { id: 1, dim: 'money', text: "Saya lebih rela uang saya hilang sebagian demi peluang untung besar, daripada uang itu aman tapi tidak berkembang." },
+        { id: 2, dim: 'money', text: "Jika ada tren bisnis viral, insting saya ingin segera ikut terjun sebelum trennya lewat." },
+        { id: 3, dim: 'money', text: "Saya merasa gelisah jika uang dingin saya hanya diam di deposito; uang harus diputar di bisnis riil." },
+        { id: 4, dim: 'money', text: "Saya berani mengambil risiko besar jika saya yakin peluang bisnis ini akan meledak." },
+        { id: 5, dim: 'money', text: "Dalam bisnis, saya lebih memilih strategi 'bakar uang' di awal untuk menguasai pasar secepat mungkin." },
+        { id: 6, dim: 'money', text: "Ketakutan terbesar saya adalah kehilangan peluang (FOMO), bukan kehilangan uang." },
+        // WORKSTYLE
+        { id: 7, dim: 'work', text: "Saya percaya pekerjaan yang baik adalah yang bisa diselesaikan tim tanpa saya harus mengeceknya." },
+        { id: 8, dim: 'work', text: "Saya lebih suka peran sebagai pembuat strategi di belakang meja daripada harus turun menangani operasional." },
+        { id: 9, dim: 'work', text: "Jika kualitas produk sedikit menurun tapi sistem bisnis jadi lebih efisien, saya bisa menerimanya." },
+        { id: 10, dim: 'work', text: "Hal pertama yang saya cari saat memulai bisnis adalah 'Siapa yang bisa saya pekerjakan?', bukan 'Bagaimana cara membuatnya?'." },
+        { id: 11, dim: 'work', text: "Saya merasa lelah jika harus mengurusi detail teknis produk atau melayani komplain pelanggan sendiri." },
+        { id: 12, dim: 'work', text: "Bagi saya, bisnis sukses adalah bisnis yang bisa jalan 100% auto-pilot saat saya liburan." },
+        // GROWTH
+        { id: 13, dim: 'growth', text: "Tujuan akhir saya adalah memiliki jaringan bisnis raksasa (nasional/global), bukan sekadar raja di satu kota." },
+        { id: 14, dim: 'growth', text: "Saya lebih suka grafik pertumbuhan yang meledak tajam (eksponensial) meskipun berisiko fluktuatif." },
+        { id: 15, dim: 'growth', text: "Saya cepat bosan jika bisnis sudah berjalan stabil; saya selalu ingin ekspansi ke pasar baru." },
+        { id: 16, dim: 'growth', text: "Saya bersedia tidak ambil profit dulu demi memperbesar skala perusahaan (scale up)." },
+        { id: 17, dim: 'growth', text: "Sistem bisnis saya harus dirancang untuk menangani ribuan transaksi, bukan pelayanan personal yang intim." },
+        { id: 18, dim: 'growth', text: "Saya lebih mengagumi startup 'Unicorn' bervaluasi tinggi daripada bisnis keluarga yang awet puluhan tahun." },
+        // DRIVER
+        { id: 19, dim: 'success', text: "Saya lebih bangga jika produk saya dianggap 'karya seni' atau inovasi keren, daripada sekadar laku keras." },
+        { id: 20, dim: 'success', text: "Saya akan menolak peluang bisnis menguntungkan jika bisnis tersebut tidak sesuai passion/nilai saya." },
+        { id: 21, dim: 'success', text: "Meninggalkan warisan (legacy) nama baik lebih penting bagi saya daripada menumpuk kekayaan pribadi." },
+        { id: 22, dim: 'success', text: "Saya rela margin keuntungan tipis asalkan kualitas produk saya adalah yang terbaik di pasaran." },
+        { id: 23, dim: 'success', text: "Pujian 'Brand kamu berkelas' lebih menyenangkan daripada pujian 'Kamu pintar cari duit'." },
+        { id: 24, dim: 'success', text: "Visi misi dan idealisme adalah nyawa bisnis saya; uang hanyalah bahan bakarnya." },
+        // SOCIAL
+        { id: 25, dim: 'social', text: "Saya merasa tidak nyaman jika wajah dan nama saya terpampang jelas di materi promosi." },
+        { id: 26, dim: 'social', text: "Saya lebih memilih strategi marketing berbayar (Ads) daripada harus bikin konten personal branding." },
+        { id: 27, dim: 'social', text: "Jika bisnis sukses, saya ingin orang tahu brand-nya saja, tanpa tahu siapa pemiliknya." },
+        { id: 28, dim: 'social', text: "Saya malas basa-basi di acara publik; saya lebih suka bekerja di balik layar." },
+        { id: 29, dim: 'social', text: "Bagi saya, privasi adalah kemewahan. Menjadi terkenal justru akan mengganggu hidup saya." },
+        { id: 30, dim: 'social', text: "Saya tidak percaya bahwa founder harus menjadi influencer agar bisnisnya laku." }
+    ];
+
+    // --- GENERATE UI ---
+    const container = document.getElementById('questions-container');
+    let currentDim = '';
+    
+    questions.forEach((q, index) => {
+        if(q.dim !== currentDim) {
+            let title = '';
+            if(q.dim === 'money') title = '1. Money Mindset (Risiko & Peluang)';
+            if(q.dim === 'work') title = '2. Workstyle (Gaya Kerja)';
+            if(q.dim === 'growth') title = '3. Growth Mode (Target Pertumbuhan)';
+            if(q.dim === 'success') title = '4. Success Driver (Motivasi)';
+            if(q.dim === 'social') title = '5. Social Style (Preferensi Tampil)';
+            
+            const h = document.createElement('div');
+            h.className = 'section-title';
+            h.innerText = title;
+            container.appendChild(h);
+            currentDim = q.dim;
+        }
+
+        const div = document.createElement('div');
+        div.className = 'question-card';
+        div.innerHTML = `
+            <label class="question-text">${index + 1}. ${q.text}</label>
+            <div class="scale-container">
+                <label class="scale-option"><input type="radio" name="q${q.id}" value="1" required><br>1</label>
+                <label class="scale-option"><input type="radio" name="q${q.id}" value="2" required><br>2</label>
+                <label class="scale-option"><input type="radio" name="q${q.id}" value="3" required><br>3</label>
+                <label class="scale-option"><input type="radio" name="q${q.id}" value="4" required><br>4</label>
+                <label class="scale-option"><input type="radio" name="q${q.id}" value="5" required><br>5</label>
+            </div>
+            <div class="scale-labels">
+                <span>Tidak Setuju</span>
+                <span>Sangat Setuju</span>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+
+    // --- LOGIC CALCULATOR ---
+    document.getElementById('dnaForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        let s = { money:0, work:0, growth:0, success:0, social:0 };
+        
+        questions.forEach(q => s[q.dim] += parseInt(formData.get(`q${q.id}`)));
+
+        // Logic: > 18 means Right Side Option
+        const l1 = s.money > 18 ? 'O' : 'C';
+        const l2 = s.work > 18 ? 'D' : 'H';
+        const l3 = s.growth > 18 ? 'X' : 'S';
+        const l4 = s.success > 18 ? 'A' : 'P';
+        const l5 = s.social > 18 ? 'G' : 'P';
+
+        const code = l1 + l2 + l3 + l4;
+        const fullCode = code + '–' + l5;
+        
+        const data = archetypes[code];
+        
+        if(data) {
+            document.getElementById('dnaForm').style.display = 'none';
+            document.getElementById('result-container').style.display = 'block';
+            window.scrollTo(0,0);
+
+            // Populate Content
+            document.getElementById('result-tribe').innerText = data.tribe;
+            document.getElementById('result-code').innerText = fullCode;
+            document.getElementById('result-name').innerText = data.name;
+            document.getElementById('result-def').innerText = data.def;
+            document.getElementById('result-biz').innerText = data.biz;
+            document.getElementById('result-figures').innerText = data.figures;
+
+            // Social Variant Logic
+            if(l5 === 'P') {
+                document.getElementById('social-variant-name').innerText = "PUBLIC (P)";
+                document.getElementById('result-social').innerText = data.social_p;
+            } else {
+                document.getElementById('social-variant-name').innerText = "GHOST (G)";
+                document.getElementById('result-social').innerText = data.social_g;
+            }
+
+            // Bars Logic
+            const calc = (val) => Math.round(((val - 6)/24)*100);
+            const barsDiv = document.getElementById('bars-display');
+            barsDiv.innerHTML = '';
+            
+            const metrics = [
+                { l: "Opportunist", r: "Conservative", v: s.money, inv: false },
+                { l: "Delegative", r: "Hands-on", v: s.work, inv: false },
+                { l: "Scalable", r: "Steady", v: s.growth, inv: false },
+                { l: "Achievement", r: "Profit", v: s.success, inv: false },
+                { l: "Ghost", r: "Public", v: s.social, inv: false }
+            ];
+
+            metrics.forEach(m => {
+                const pct = calc(m.v);
+                barsDiv.innerHTML += `
+                    <div class="bar-container">
+                        <div class="bar-label">
+                            <span>${m.r}</span>
+                            <span>${m.l} (${pct}%)</span>
+                        </div>
+                        <div class="progress-bg">
+                            <div class="progress-fill" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    });
+</script>
+
+</body>
+</html>
